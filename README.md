@@ -41,3 +41,5 @@ No equal-priority FIFO, ChainTask, multiple activation queues, Extended Tasks, e
 Public repository creation, remote push, GitHub Actions execution and Pages publication have **not** been completed in the bootstrap environment. The authenticated account was `4ge32`; repository lookup was 404 (which can also indicate missing access), the connector cannot create repositories, and browser creation was denied. Local work and publication configuration are retained for continuation. Do not infer that a remote URL exists from the project name.
 
 A source-code license has deliberately **not been selected**. Public visibility and licensing are separate decisions. No third-party specification text or reference implementation code is included.
+
+Specification target: **AUTOSAR CP OS R25-11**, the current official release checked on 2026-10-12. OSEK 2.2.3 / ATK2 remain foundational and historical references. R25-11 OS document mapping is pending; no compatibility claim. See [source policy](docs/SOURCES.md).
