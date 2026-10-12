@@ -19,6 +19,11 @@
       "id": "T-CONTROL",
       "file": "c/control_flow.c",
       "scope": "high -> low -> idle; no successful C continuation; idle error returns"
+    },
+    {
+      "id": "T-EVIDENCE",
+      "file": "tests/test_evidence.py",
+      "scope": "batch/new branch/unavailable baseline enumeration; old SHA without verifier remains not_run"
     }
   ]
 }

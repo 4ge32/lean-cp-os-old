@@ -45,6 +45,20 @@
       "verification": "identified by repository tree SHA",
       "redistribute": true,
       "rights": "Project software license intentionally undecided; public visibility does not select one."
+    },
+    {
+      "id": "ATK2-SC1-1.4.2",
+      "kind": "reference-code",
+      "version": "1.4.2",
+      "date": "2017-03-24",
+      "url": "https://www.toppers.jp/download.cgi/atk2-sc1-1.4.2.tar.gz",
+      "sha256": "ae02b8433f83f77661e8f202101c2b5f6cf8e12aadfe94ab666aef9b527a2e1d",
+      "verification": "Official archive read; task_manage.c ActivateTask/TerminateTask and license header inspected",
+      "file_hashes": {
+        "kernel/task_manage.c": "d176c165c1f056ec89f4175060064206e4d4d4c19ff0b7ca4a35dea76721ff18"
+      },
+      "redistribute": false,
+      "rights": "TOPPERS source/header, binary redistribution notice/report and indemnification conditions; AUTOSAR IP explicitly not licensed. No code copied."
     }
   ]
 }

@@ -7,10 +7,8 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-# Do not cancel earlier commit evidence when another push arrives.
-concurrency:
-  group: verify-${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: false
+# No shared concurrency group: GitHub may replace pending runs even when
+# cancel-in-progress is false. Keep every push's enumeration/evidence.
 jobs:
   verify:
     runs-on: ubuntu-24.04

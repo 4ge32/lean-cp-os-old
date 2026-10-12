@@ -22,3 +22,7 @@ Recommend R24-11 as the first modern comparison snapshot: it provides a fixed CP
 - [AUTOSAR official CP guidance](https://www.autosar.org/standards/classic-platform) refers commercial exploitation to partnership. The exact R24-11 OS disclaimer is not yet fully retrieved, so its detailed reuse conditions are unresolved; no spec material is bundled. This record is an engineering provenance policy, not a legal opinion or a commercial-use clearance.
 - **Project source license is undecided.** No MIT/Apache/GPL permission is implicitly selected by a public repository request. Only original project files and generated evidence are intended for publication.
 - Lean is an external tool dependency obtained from the official pinned release. The full tool distribution is not vendored. Binary evidence includes runtime components; see the distribution's [LICENSE](https://github.com/leanprover/lean4/blob/v4.19.0/LICENSE) and third-party notices before redistribution. Runtime license notices must accompany packaged binary evidence.
+
+## Reference implementation inspected
+
+ATK2-SC1 **1.4.2** (official 2017-03-24 archive) is pinned separately from document version 1.2.2. Archive and `kernel/task_manage.c` hashes are recorded. The activation limit and termination dispatch paths plus the actual file license header were inspected. Its successful termination uses a distinct discard-and-dispatch path, with normal return reserved for errors; M0 uses this as design context without copying implementation text. ATK2 resource/interrupt checks are intentionally deferred here.

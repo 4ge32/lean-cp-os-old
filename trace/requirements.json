@@ -221,6 +221,12 @@
             "COS3217"
           ],
           "id_note": "IDs verified in the named document; never re-labelled as another standard."
+        },
+        {
+          "document": "ATK2-SC1-1.4.2",
+          "section": "kernel/task_manage.c::ActivateTask",
+          "requirement_ids": [],
+          "id_note": "Implementation reference, not a standard requirement."
         }
       ],
       "definitions": [
@@ -333,6 +339,12 @@
             "COS3232"
           ],
           "id_note": "IDs verified in the named document; never re-labelled as another standard."
+        },
+        {
+          "document": "ATK2-SC1-1.4.2",
+          "section": "kernel/task_manage.c::TerminateTask",
+          "requirement_ids": [],
+          "id_note": "Implementation reference, not a standard requirement."
         }
       ],
       "definitions": [
@@ -881,6 +893,40 @@
       "implementation": "unimplemented",
       "proof": "unproved",
       "test": "not_run"
+    },
+    {
+      "id": "LCPO-019",
+      "title": "Enumerate every introduced SHA and preserve failed/not_run historical evidence",
+      "scope": "partial",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Every-commit evidence",
+          "requirement_ids": [],
+          "id_note": "Project pipeline requirement"
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [],
+      "tests": [
+        "T-EVIDENCE"
+      ],
+      "files": [
+        "scripts/enumerate_commits.py",
+        "scripts/verify_commits.py",
+        "scripts/verify.py",
+        "tests/test_evidence.py",
+        ".github/workflows/verify.yml"
+      ],
+      "implementation": "partial",
+      "proof": "unproved",
+      "test": "not_run",
+      "limitation": "Local fixtures exercised; remote Actions/Pages still not executed."
     }
   ]
 }

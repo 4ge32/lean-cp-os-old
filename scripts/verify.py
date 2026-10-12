@@ -62,6 +62,7 @@ stage('host-and-c-tests',['python3','tests/test_differential.py',str(out/'test-r
 stage('control-flow',['build/control-flow'],['link-control'])
 stage('runtime-audit',['python3','scripts/runtime_audit.py',str(out)],['compile-model','compile-bridge'])
 stage('symbols',['nm','--defined-only','build/c-host'],['link-host'])
+stage('evidence-selftests',['python3','tests/test_evidence.py'])
 stage('trace',['python3','scripts/trace_check.py',str(out)])
 # Preserve actual generated C, compiler frame reports and linked binaries.
 for src in ['build','.lake/build/lib/lean']:
