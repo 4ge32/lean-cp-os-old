@@ -1,0 +1,30 @@
+import LeanCpOs.Proofs
+
+#print axioms LeanCpOs.initial_valid
+#print axioms LeanCpOs.schedule_valid
+#print axioms LeanCpOs.select_member
+#print axioms LeanCpOs.select_highest
+#print axioms LeanCpOs.select_none_iff
+#print axioms LeanCpOs.activate_preserves
+#print axioms LeanCpOs.terminate_preserves
+#print axioms LeanCpOs.running_current
+#print axioms LeanCpOs.at_most_one_running
+#print axioms LeanCpOs.active_state_consistent
+#print axioms LeanCpOs.activation_limit
+#print axioms LeanCpOs.invalid_activation
+#print axioms LeanCpOs.activation_error_frame
+#print axioms LeanCpOs.activation_success
+#print axioms LeanCpOs.activation_other_active
+#print axioms LeanCpOs.preemption
+#print axioms LeanCpOs.termination_dispatch
+#print axioms LeanCpOs.termination_suspends
+#print axioms LeanCpOs.termination_other_active
+#print axioms LeanCpOs.termination_error_frame
+#print axioms LeanCpOs.unrelated_task_state
+#print axioms LeanCpOs.get_id_correct
+#print axioms LeanCpOs.get_state_correct
+#print axioms LeanCpOs.get_state_invalid
+#print axioms LeanCpOs.initial_suspended
+#print axioms LeanCpOs.transition_preserves
+#print axioms LeanCpOs.execution_preserves
+#print axioms LeanCpOs.reachable_valid
