@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "OSEK-OS-2.2.3",
+      "kind": "standard",
+      "version": "2.2.3",
+      "date": "2005-02-17",
+      "url": "http://portal.osek-vdx.org/files/pdf/specs/os223.pdf",
+      "retrieved_url": "https://www.irisa.fr/alf/downloads/puaut/TPNXT/images/os223.pdf",
+      "sha256": "a0bb10b0b1413b3d95a40de117d3bedd3bbb74e2cae23c074c5532a95fa715cf",
+      "verification": "official release document read from academic mirror; original endpoint unavailable",
+      "redistribute": false,
+      "rights": "Cover reserves reproduction to written permission; no PDF or extracted text shipped."
+    },
+    {
+      "id": "ATK2-0010-1.2.2",
+      "kind": "reference-design",
+      "version": "1.2.2",
+      "date": "2017-03-24",
+      "url": "https://www.toppers.jp/docs/tech/ATK2-0010_ATK2_spec_122.pdf",
+      "sha256": "c64ba32e67bd02afe4503adc199dada5cb31acc1a5015da19f8bea304291358d",
+      "verification": "official PDF read",
+      "redistribute": false,
+      "rights": "Page i has document-specific conditions; not bundled. AUTOSAR IP is not licensed by that permission.",
+      "baseline": "AUTOSAR Release 4.0 Revision 3 per https://www.toppers.jp/atk2.html"
+    },
+    {
+      "id": "AUTOSAR-CP-R24-11-OS",
+      "kind": "candidate-standard",
+      "version": "R24-11",
+      "url": "https://www.autosar.org/fileadmin/standards/R24-11/CP/AUTOSAR_CP_SWS_OS.pdf",
+      "sha256": null,
+      "verification": "official indexed section 7.1.2 / page 36 checked; complete PDF download failed HTTP 502/timeouts",
+      "redistribute": false,
+      "rights": "No text bundled; exact OS-document disclaimer not yet fully read. Official partnership guidance checked at https://www.autosar.org/standards/classic-platform and https://www.toppers.jp/autosar.html.",
+      "adoption": "proposed delta baseline only; full review and byte hash pending"
+    },
+    {
+      "id": "PROJECT-M0",
+      "kind": "project-decision",
+      "version": "0.1",
+      "url": "docs/DESIGN.md",
+      "sha256": null,
+      "verification": "identified by repository tree SHA",
+      "redistribute": true,
+      "rights": "Project software license intentionally undecided; public visibility does not select one."
+    }
+  ]
+}

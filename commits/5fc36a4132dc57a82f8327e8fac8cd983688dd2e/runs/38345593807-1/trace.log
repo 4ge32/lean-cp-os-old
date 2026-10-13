@@ -1,0 +1,25 @@
+{
+  "structural_status": "failed",
+  "coverage_status": "incomplete",
+  "errors": [
+    "LCPO-001: missing generated symbol l_LeanCpOs_initial"
+  ],
+  "gaps": [
+    "LCPO-011: no checked proof for this boundary",
+    "LCPO-012: deferred/unimplemented/unproved/not_run",
+    "LCPO-012: source PDF hash unavailable: AUTOSAR-CP-R24-11-OS",
+    "LCPO-012: tests not_run",
+    "LCPO-013: deferred/unimplemented/unproved/not_run",
+    "LCPO-013: tests not_run",
+    "LCPO-014: deferred/unimplemented/unproved/not_run",
+    "LCPO-014: tests not_run",
+    "LCPO-015: deferred/unimplemented/unproved/not_run",
+    "LCPO-015: tests not_run",
+    "LCPO-016: deferred/unimplemented/unproved/not_run",
+    "LCPO-016: tests not_run",
+    "LCPO-017: deferred/unimplemented/unproved/not_run",
+    "LCPO-017: tests not_run",
+    "LCPO-018: deferred/unimplemented/unproved/not_run",
+    "LCPO-018: tests not_run"
+  ]
+}
