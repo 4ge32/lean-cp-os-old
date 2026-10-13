@@ -24,4 +24,15 @@ with tempfile.TemporaryDirectory(prefix='lcpo-evidence-test-') as tmp:
             records=[json.loads(f.read_text()) for f in out.glob('commits/*/runs/*/execution.json')]
             assert len(records)==2 and all(x['status']=='not_run' and 'predates' in x['reason'] for x in records)
         print('PASS evidence scenario:',name, len(expected),'SHAs')
+    env['GITHUB_EVENT_NAME']='workflow_dispatch'
+    for name,inputs,expected in [('manual-default',{},[shas[-1]]),('manual-head',{'scope':'head'},[shas[-1]]),('manual-history',{'scope':'history'},shas)]:
+        event=pathlib.Path(tmp)/(name+'.json');event.write_text(json.dumps({'inputs':inputs}));env['GITHUB_EVENT_PATH']=str(event)
+        out=pathlib.Path(tmp)/name
+        subprocess.run(['python3',str(enumerate_script),str(out)],cwd=repo,env=env,check=True,stdout=subprocess.DEVNULL)
+        plan=json.loads((out/'targets.json').read_text());assert plan['targets']==expected,(name,plan)
+        assert plan['scope']==inputs.get('scope','head')
+        records=list(out.glob('commits/*/runs/fixture-1/execution.json'))
+        assert len(records)==len(expected)
+        assert all(json.loads(f.read_text())['status']=='not_run' for f in records)
+        print('PASS evidence scenario:',name,len(expected),'SHAs')
 print('PASS T-EVIDENCE: historical SHAs stay not_run; batch push does not collapse to HEAD')

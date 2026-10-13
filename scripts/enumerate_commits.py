@@ -3,6 +3,8 @@
 import json,os,pathlib,re,subprocess,sys
 out=pathlib.Path(sys.argv[1]);out.mkdir(parents=True,exist_ok=True)
 event=json.load(open(os.environ['GITHUB_EVENT_PATH']));kind=os.environ['GITHUB_EVENT_NAME'];warnings=[]
+scope=event.get('inputs',{}).get('scope','head') if kind=='workflow_dispatch' else 'history'
+if scope not in ['head','history']:raise ValueError('Invalid verification scope')
 def git(*a):return subprocess.check_output(['git',*a],text=True).strip()
 def valid(sha):
     if not re.fullmatch('[0-9a-f]{40}',sha):raise ValueError('not a full SHA')
@@ -14,6 +16,7 @@ elif kind=='pull_request':
 else:
     after=valid(git('rev-parse','HEAD'));before='0'*40
 if after=='0'*40:targets=[];warnings.append('Branch deletion: no target commit')
+elif scope=='head':targets=[after]
 else:
     if before!='0'*40:
         try:git('cat-file','-e',before+'^{commit}')
@@ -23,7 +26,7 @@ else:
     selection=after if before=='0'*40 else before+'..'+after
     targets=git('rev-list','--reverse','--topo-order',selection).splitlines()
     if not targets:targets=[after];warnings.append('Empty range: verify after SHA explicitly')
-plan=dict(event=kind,before=before,after=after,targets=targets,warnings=warnings,run_id=os.environ.get('GITHUB_RUN_ID','local'),attempt=os.environ.get('GITHUB_RUN_ATTEMPT','1'))
+plan=dict(event=kind,scope=scope,before=before,after=after,targets=targets,warnings=warnings,run_id=os.environ.get('GITHUB_RUN_ID','local'),attempt=os.environ.get('GITHUB_RUN_ATTEMPT','1'))
 (out/'targets.json').write_text(json.dumps(plan,indent=2)+'\n')
 # Persist every not-run record BEFORE setup or verification, so interruption is visible.
 for sha in targets:

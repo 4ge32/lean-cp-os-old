@@ -5,6 +5,14 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      scope:
+        description: Verify the selected branch tip or backfill all reachable history
+        type: choice
+        default: head
+        options:
+          - head
+          - history
 permissions:
   contents: read
 # No shared concurrency group: GitHub may replace pending runs even when
