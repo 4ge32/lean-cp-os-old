@@ -1,5 +1,11 @@
 # Lean CP OS
 
+## はじめて読む方へ
+
+このプロジェクトは、OS の「次にどの仕事を動かすか」を、3 つの仕事だけで学ぶための小さな模型です。Lean で動くプログラムを書き、そのルールが守られることを証明し、生成した C の動作もテストします。
+
+まず [日本語の入門ガイド](docs/GETTING_STARTED.ja.md)で、タスクの動きと「証明・テストの違い」を追ってみてください。OS や Lean の予備知識は必要ありません。その後、下の実行手順、設計資料、検証結果の順に進めます。
+
 A small executable and proved **three-task transition kernel**, studying OSEK OS / AUTOSAR Classic Platform OS with TOPPERS ATK2 as a reference. This is the start of a kernel project, not a production OS or a conformance claim.
 
 **M0:** one core; exactly three statically configured Basic Tasks, priorities 1 < 2 < 3; at most one activation each; immediate priority selection at modeled scheduling points. Suspended/Ready/Running, activation, termination and two queries are implemented in Lean 4.19.0. Actual generated C is linked to host C and exercised through a scalar C ABI.
