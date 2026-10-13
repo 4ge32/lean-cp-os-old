@@ -1,0 +1,28 @@
+'LeanCpOs.initial_valid' does not depend on any axioms
+'LeanCpOs.schedule_valid' does not depend on any axioms
+'LeanCpOs.select_member' does not depend on any axioms
+'LeanCpOs.select_highest' does not depend on any axioms
+'LeanCpOs.select_none_iff' does not depend on any axioms
+'LeanCpOs.activate_preserves' depends on axioms: [propext]
+'LeanCpOs.terminate_preserves' does not depend on any axioms
+'LeanCpOs.running_current' depends on axioms: [propext]
+'LeanCpOs.at_most_one_running' depends on axioms: [propext]
+'LeanCpOs.active_state_consistent' depends on axioms: [propext]
+'LeanCpOs.activation_limit' depends on axioms: [propext]
+'LeanCpOs.invalid_activation' does not depend on any axioms
+'LeanCpOs.activation_error_frame' depends on axioms: [propext]
+'LeanCpOs.activation_success' depends on axioms: [propext]
+'LeanCpOs.activation_other_active' depends on axioms: [propext]
+'LeanCpOs.preemption' depends on axioms: [propext]
+'LeanCpOs.termination_dispatch' depends on axioms: [propext]
+'LeanCpOs.termination_suspends' depends on axioms: [propext]
+'LeanCpOs.termination_other_active' depends on axioms: [propext]
+'LeanCpOs.termination_error_frame' depends on axioms: [propext]
+'LeanCpOs.unrelated_task_state' depends on axioms: [propext]
+'LeanCpOs.get_id_correct' does not depend on any axioms
+'LeanCpOs.get_state_correct' does not depend on any axioms
+'LeanCpOs.get_state_invalid' does not depend on any axioms
+'LeanCpOs.initial_suspended' does not depend on any axioms
+'LeanCpOs.transition_preserves' depends on axioms: [propext]
+'LeanCpOs.execution_preserves' depends on axioms: [propext]
+'LeanCpOs.reachable_valid' depends on axioms: [propext]
