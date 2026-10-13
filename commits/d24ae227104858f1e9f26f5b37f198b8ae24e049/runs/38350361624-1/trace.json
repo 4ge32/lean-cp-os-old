@@ -1,0 +1,1494 @@
+{
+  "evidence_identity": {
+    "sha": "d24ae227104858f1e9f26f5b37f198b8ae24e049",
+    "tree_sha": "0dca4d1fd82177ed040179fb9405d14b0a1300e9",
+    "run_id": "38350361624",
+    "attempt": "1",
+    "exact_commit": true
+  },
+  "generation": {
+    "model": "generate-model.log",
+    "bridge": "generate-bridge.log",
+    "compiler_flags": "compile-model.log / compile-bridge.log; -O2 -fstack-usage",
+    "conditions_file": "report.json",
+    "c_assembly_boundary": "C host boundary only; assembly not implemented"
+  },
+  "structural_status": "passed",
+  "coverage_status": "incomplete",
+  "errors": [],
+  "gaps": [
+    "LCPO-011: no checked proof for this boundary",
+    "LCPO-012: deferred/unimplemented/unproved/not_run",
+    "LCPO-012: source PDF hash unavailable: AUTOSAR-CP-R24-11-OS",
+    "LCPO-012: tests not_run",
+    "LCPO-013: deferred/unimplemented/unproved/not_run",
+    "LCPO-013: tests not_run",
+    "LCPO-014: deferred/unimplemented/unproved/not_run",
+    "LCPO-014: tests not_run",
+    "LCPO-015: deferred/unimplemented/unproved/not_run",
+    "LCPO-015: tests not_run",
+    "LCPO-016: deferred/unimplemented/unproved/not_run",
+    "LCPO-016: tests not_run",
+    "LCPO-017: deferred/unimplemented/unproved/not_run",
+    "LCPO-017: tests not_run",
+    "LCPO-018: deferred/unimplemented/unproved/not_run",
+    "LCPO-018: tests not_run",
+    "LCPO-019: no checked proof for this boundary"
+  ],
+  "requirements": [
+    {
+      "id": "LCPO-001",
+      "title": "Initial state and finite transition sequences preserve scheduler validity",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "M0 state invariant",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.2.2",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.Valid",
+        "LeanCpOs.initial",
+        "LeanCpOs.schedule",
+        "LeanCpOs.execute",
+        "LeanCpOs.transition"
+      ],
+      "theorems": [
+        "LeanCpOs.initial_valid",
+        "LeanCpOs.schedule_valid",
+        "LeanCpOs.activate_preserves",
+        "LeanCpOs.terminate_preserves",
+        "LeanCpOs.initial_suspended",
+        "LeanCpOs.transition_preserves",
+        "LeanCpOs.execution_preserves",
+        "LeanCpOs.reachable_valid"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_schedule",
+        "l_LeanCpOs_initial"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-002",
+      "title": "Running/current/active membership consistency and at most one runner",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.2.2",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "ATK2-0010-1.2.2",
+          "section": "2.5.1",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.State",
+        "LeanCpOs.Active.get",
+        "LeanCpOs.taskState"
+      ],
+      "theorems": [
+        "LeanCpOs.running_current",
+        "LeanCpOs.at_most_one_running",
+        "LeanCpOs.active_state_consistent"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_taskState"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-003",
+      "title": "Select an active maximum-priority task and reschedule immediately in model",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.5; 4.6.1",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "ATK2-0010-1.2.2",
+          "section": "2.5.7; 2.5.8",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.select",
+        "LeanCpOs.priority",
+        "LeanCpOs.schedule"
+      ],
+      "theorems": [
+        "LeanCpOs.select_member",
+        "LeanCpOs.select_highest",
+        "LeanCpOs.select_none_iff",
+        "LeanCpOs.preemption"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_select",
+        "l_LeanCpOs_schedule"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-004",
+      "title": "Activation succeeds only for suspended task; one active instance maximum",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.1",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "ATK2-0010-1.2.2",
+          "section": "3.9.4",
+          "requirement_ids": [
+            "COS3213",
+            "COS3220",
+            "COS3217"
+          ],
+          "id_note": "IDs verified in the named document; never re-labelled as another standard."
+        },
+        {
+          "document": "ATK2-SC1-1.4.2",
+          "section": "kernel/task_manage.c::ActivateTask",
+          "requirement_ids": [],
+          "id_note": "Implementation reference, not a standard requirement."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.activate"
+      ],
+      "theorems": [
+        "LeanCpOs.activation_success",
+        "LeanCpOs.activation_limit"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_activate"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-005",
+      "title": "Invalid IDs and duplicate activation leave complete state unchanged",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.1",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "ATK2-0010-1.2.2",
+          "section": "3.9.4",
+          "requirement_ids": [
+            "COS3221"
+          ],
+          "id_note": "IDs verified in the named document; never re-labelled as another standard."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.activate"
+      ],
+      "theorems": [
+        "LeanCpOs.invalid_activation",
+        "LeanCpOs.activation_error_frame"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_activate"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-006",
+      "title": "Termination removes current activation and produces a dispatch result",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.2",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "ATK2-0010-1.2.2",
+          "section": "3.9.5",
+          "requirement_ids": [
+            "COS3226",
+            "COS3230",
+            "COS3232"
+          ],
+          "id_note": "IDs verified in the named document; never re-labelled as another standard."
+        },
+        {
+          "document": "ATK2-SC1-1.4.2",
+          "section": "kernel/task_manage.c::TerminateTask",
+          "requirement_ids": [],
+          "id_note": "Implementation reference, not a standard requirement."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.terminate",
+        "LeanCpOs.Control"
+      ],
+      "theorems": [
+        "LeanCpOs.termination_dispatch",
+        "LeanCpOs.termination_suspends"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_terminate"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c",
+        "c/control_flow.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL",
+        "T-CONTROL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "c/control_flow.c",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed",
+      "limitation": "Host longjmp demonstrated; no CPU/assembly context switch or machine-level non-return proof."
+    },
+    {
+      "id": "LCPO-007",
+      "title": "Idle termination returns project call-level error without mutation",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Idle API call policy",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.terminate"
+      ],
+      "theorems": [
+        "LeanCpOs.termination_error_frame"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_terminate"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL",
+        "T-CONTROL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-008",
+      "title": "Frame condition preserves unrelated activation membership and task state",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Frame conditions",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.Active.set",
+        "LeanCpOs.taskState"
+      ],
+      "theorems": [
+        "LeanCpOs.activation_other_active",
+        "LeanCpOs.termination_other_active",
+        "LeanCpOs.unrelated_task_state"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_Active_set",
+        "l_LeanCpOs_taskState"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed",
+      "limitation": "The old/new running task may legitimately change Running/Ready during preemption."
+    },
+    {
+      "id": "LCPO-009",
+      "title": "Query running task and idle sentinel without mutation",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.5",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "ATK2-0010-1.2.2",
+          "section": "3.9.8",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.getTaskID"
+      ],
+      "theorems": [
+        "LeanCpOs.get_id_correct"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_getTaskID"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-010",
+      "title": "Query task state; invalid ID yields ID error and no value",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.6",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        },
+        {
+          "document": "ATK2-0010-1.2.2",
+          "section": "3.9.9",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.getTaskState"
+      ],
+      "theorems": [
+        "LeanCpOs.get_state_correct",
+        "LeanCpOs.get_state_invalid"
+      ],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "l_LeanCpOs_getTaskState"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "implemented",
+      "proof": "checked",
+      "test": "passed"
+    },
+    {
+      "id": "LCPO-011",
+      "title": "Generated C scalar ABI agrees with Lean and independent oracle on tested inputs",
+      "scope": "partial",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Scalar ABI",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.step",
+        "LeanCpOs.pack",
+        "LeanCpOs.fromMask",
+        "LeanCpOs.decodeTask"
+      ],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-ABI",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "lean_cp_step",
+        "initialize_LeanCpOs_Bridge"
+      ],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [
+        "T-HOST",
+        "T-C-ABI",
+        "T-DIFFERENTIAL"
+      ],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "partial",
+      "proof": "unproved",
+      "test": "passed",
+      "limitation": "Packing, compiler preservation and FFI correctness tested, not formally proved."
+    },
+    {
+      "id": "LCPO-012",
+      "title": "AUTOSAR OSEK API backwards compatibility",
+      "scope": "deferred",
+      "sources": [
+        {
+          "document": "AUTOSAR-CP-R24-11-OS",
+          "section": "7.1.2 p36",
+          "requirement_ids": [
+            "SWS_Os_00001"
+          ],
+          "id_note": "IDs verified in the named document; never re-labelled as another standard."
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "unimplemented",
+      "proof": "unproved",
+      "test": "not_run",
+      "limitation": "Broad standard requirement NOT satisfied by scalar test ABI."
+    },
+    {
+      "id": "LCPO-013",
+      "title": "Equal-priority FIFO, ChainTask and multiple activations",
+      "scope": "deferred",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Deferred scope",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "unimplemented",
+      "proof": "unproved",
+      "test": "not_run"
+    },
+    {
+      "id": "LCPO-014",
+      "title": "Extended tasks, events, resources and priority ceiling",
+      "scope": "deferred",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Deferred scope",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "unimplemented",
+      "proof": "unproved",
+      "test": "not_run"
+    },
+    {
+      "id": "LCPO-015",
+      "title": "Alarms, counters, interrupts and timing services",
+      "scope": "deferred",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Deferred scope",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "unimplemented",
+      "proof": "unproved",
+      "test": "not_run"
+    },
+    {
+      "id": "LCPO-016",
+      "title": "Multicore, protection, hooks and full API call-level rules",
+      "scope": "deferred",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Deferred scope",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "unimplemented",
+      "proof": "unproved",
+      "test": "not_run"
+    },
+    {
+      "id": "LCPO-017",
+      "title": "Liveness, starvation freedom, WCET and bounded memory/stack",
+      "scope": "deferred",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Deferred scope",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "unimplemented",
+      "proof": "unproved",
+      "test": "not_run"
+    },
+    {
+      "id": "LCPO-018",
+      "title": "Bare-metal HAL, actual preemption and machine context refinement",
+      "scope": "deferred",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Deferred scope",
+          "requirement_ids": [],
+          "id_note": "No original requirement ID assigned; section anchor only."
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-STATIC3",
+        "A-ATOMIC",
+        "A-VALID",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [
+        "c/bridge.h",
+        "c/host.c"
+      ],
+      "tests": [],
+      "files": [
+        "LeanCpOs/Model.lean",
+        "LeanCpOs/Proofs.lean",
+        "LeanCpOs/Bridge.lean",
+        "tests/test_differential.py"
+      ],
+      "implementation": "unimplemented",
+      "proof": "unproved",
+      "test": "not_run"
+    },
+    {
+      "id": "LCPO-019",
+      "title": "Enumerate every introduced SHA and preserve failed/not_run historical evidence",
+      "scope": "partial",
+      "sources": [
+        {
+          "document": "PROJECT-M0",
+          "section": "Every-commit evidence",
+          "requirement_ids": [],
+          "id_note": "Project pipeline requirement"
+        }
+      ],
+      "definitions": [],
+      "theorems": [],
+      "assumptions": [
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [],
+      "tests": [
+        "T-EVIDENCE"
+      ],
+      "files": [
+        "scripts/enumerate_commits.py",
+        "scripts/verify_commits.py",
+        "scripts/verify.py",
+        "tests/test_evidence.py",
+        ".github/workflows/verify.yml"
+      ],
+      "implementation": "partial",
+      "proof": "unproved",
+      "test": "passed",
+      "limitation": "Local fixtures exercised; remote Actions/Pages still not executed."
+    }
+  ],
+  "reverse": {
+    "A-STATIC3": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "A-ATOMIC": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "A-VALID": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "A-TRUST": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018",
+      "LCPO-019"
+    ],
+    "LeanCpOs.Valid": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.initial": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.schedule": [
+      "LCPO-001",
+      "LCPO-003"
+    ],
+    "LeanCpOs.execute": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.transition": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.initial_valid": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.schedule_valid": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.activate_preserves": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.terminate_preserves": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.initial_suspended": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.transition_preserves": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.execution_preserves": [
+      "LCPO-001"
+    ],
+    "LeanCpOs.reachable_valid": [
+      "LCPO-001"
+    ],
+    "l_LeanCpOs_schedule": [
+      "LCPO-001",
+      "LCPO-003"
+    ],
+    "l_LeanCpOs_initial": [
+      "LCPO-001"
+    ],
+    "T-HOST": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011"
+    ],
+    "T-C-ABI": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011"
+    ],
+    "T-DIFFERENTIAL": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011"
+    ],
+    "LeanCpOs/Model.lean": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "LeanCpOs/Proofs.lean": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "LeanCpOs/Bridge.lean": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "tests/test_differential.py": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "c/bridge.h": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "c/host.c": [
+      "LCPO-001",
+      "LCPO-002",
+      "LCPO-003",
+      "LCPO-004",
+      "LCPO-005",
+      "LCPO-006",
+      "LCPO-007",
+      "LCPO-008",
+      "LCPO-009",
+      "LCPO-010",
+      "LCPO-011",
+      "LCPO-012",
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "PROJECT-M0:M0 state invariant": [
+      "LCPO-001"
+    ],
+    "OSEK-OS-2.2.3:4.2.2": [
+      "LCPO-001",
+      "LCPO-002"
+    ],
+    "LeanCpOs.State": [
+      "LCPO-002"
+    ],
+    "LeanCpOs.Active.get": [
+      "LCPO-002"
+    ],
+    "LeanCpOs.taskState": [
+      "LCPO-002",
+      "LCPO-008"
+    ],
+    "LeanCpOs.running_current": [
+      "LCPO-002"
+    ],
+    "LeanCpOs.at_most_one_running": [
+      "LCPO-002"
+    ],
+    "LeanCpOs.active_state_consistent": [
+      "LCPO-002"
+    ],
+    "l_LeanCpOs_taskState": [
+      "LCPO-002",
+      "LCPO-008"
+    ],
+    "ATK2-0010-1.2.2:2.5.1": [
+      "LCPO-002"
+    ],
+    "LeanCpOs.select": [
+      "LCPO-003"
+    ],
+    "LeanCpOs.priority": [
+      "LCPO-003"
+    ],
+    "LeanCpOs.select_member": [
+      "LCPO-003"
+    ],
+    "LeanCpOs.select_highest": [
+      "LCPO-003"
+    ],
+    "LeanCpOs.select_none_iff": [
+      "LCPO-003"
+    ],
+    "LeanCpOs.preemption": [
+      "LCPO-003"
+    ],
+    "l_LeanCpOs_select": [
+      "LCPO-003"
+    ],
+    "OSEK-OS-2.2.3:4.5; 4.6.1": [
+      "LCPO-003"
+    ],
+    "ATK2-0010-1.2.2:2.5.7; 2.5.8": [
+      "LCPO-003"
+    ],
+    "ATK2-0010-1.2.2:COS3213": [
+      "LCPO-004"
+    ],
+    "ATK2-0010-1.2.2:COS3220": [
+      "LCPO-004"
+    ],
+    "ATK2-0010-1.2.2:COS3217": [
+      "LCPO-004"
+    ],
+    "LeanCpOs.activate": [
+      "LCPO-004",
+      "LCPO-005"
+    ],
+    "LeanCpOs.activation_success": [
+      "LCPO-004"
+    ],
+    "LeanCpOs.activation_limit": [
+      "LCPO-004"
+    ],
+    "l_LeanCpOs_activate": [
+      "LCPO-004",
+      "LCPO-005"
+    ],
+    "OSEK-OS-2.2.3:13.2.3.1": [
+      "LCPO-004",
+      "LCPO-005"
+    ],
+    "ATK2-0010-1.2.2:3.9.4": [
+      "LCPO-004",
+      "LCPO-005"
+    ],
+    "ATK2-SC1-1.4.2:kernel/task_manage.c::ActivateTask": [
+      "LCPO-004"
+    ],
+    "ATK2-0010-1.2.2:COS3221": [
+      "LCPO-005"
+    ],
+    "LeanCpOs.invalid_activation": [
+      "LCPO-005"
+    ],
+    "LeanCpOs.activation_error_frame": [
+      "LCPO-005"
+    ],
+    "ATK2-0010-1.2.2:COS3226": [
+      "LCPO-006"
+    ],
+    "ATK2-0010-1.2.2:COS3230": [
+      "LCPO-006"
+    ],
+    "ATK2-0010-1.2.2:COS3232": [
+      "LCPO-006"
+    ],
+    "LeanCpOs.terminate": [
+      "LCPO-006",
+      "LCPO-007"
+    ],
+    "LeanCpOs.Control": [
+      "LCPO-006"
+    ],
+    "LeanCpOs.termination_dispatch": [
+      "LCPO-006"
+    ],
+    "LeanCpOs.termination_suspends": [
+      "LCPO-006"
+    ],
+    "l_LeanCpOs_terminate": [
+      "LCPO-006",
+      "LCPO-007"
+    ],
+    "T-CONTROL": [
+      "LCPO-006",
+      "LCPO-007"
+    ],
+    "c/control_flow.c": [
+      "LCPO-006"
+    ],
+    "OSEK-OS-2.2.3:13.2.3.2": [
+      "LCPO-006"
+    ],
+    "ATK2-0010-1.2.2:3.9.5": [
+      "LCPO-006"
+    ],
+    "ATK2-SC1-1.4.2:kernel/task_manage.c::TerminateTask": [
+      "LCPO-006"
+    ],
+    "LeanCpOs.termination_error_frame": [
+      "LCPO-007"
+    ],
+    "PROJECT-M0:Idle API call policy": [
+      "LCPO-007"
+    ],
+    "LeanCpOs.Active.set": [
+      "LCPO-008"
+    ],
+    "LeanCpOs.activation_other_active": [
+      "LCPO-008"
+    ],
+    "LeanCpOs.termination_other_active": [
+      "LCPO-008"
+    ],
+    "LeanCpOs.unrelated_task_state": [
+      "LCPO-008"
+    ],
+    "l_LeanCpOs_Active_set": [
+      "LCPO-008"
+    ],
+    "PROJECT-M0:Frame conditions": [
+      "LCPO-008"
+    ],
+    "LeanCpOs.getTaskID": [
+      "LCPO-009"
+    ],
+    "LeanCpOs.get_id_correct": [
+      "LCPO-009"
+    ],
+    "l_LeanCpOs_getTaskID": [
+      "LCPO-009"
+    ],
+    "OSEK-OS-2.2.3:13.2.3.5": [
+      "LCPO-009"
+    ],
+    "ATK2-0010-1.2.2:3.9.8": [
+      "LCPO-009"
+    ],
+    "LeanCpOs.getTaskState": [
+      "LCPO-010"
+    ],
+    "LeanCpOs.get_state_correct": [
+      "LCPO-010"
+    ],
+    "LeanCpOs.get_state_invalid": [
+      "LCPO-010"
+    ],
+    "l_LeanCpOs_getTaskState": [
+      "LCPO-010"
+    ],
+    "OSEK-OS-2.2.3:13.2.3.6": [
+      "LCPO-010"
+    ],
+    "ATK2-0010-1.2.2:3.9.9": [
+      "LCPO-010"
+    ],
+    "A-ABI": [
+      "LCPO-011"
+    ],
+    "LeanCpOs.step": [
+      "LCPO-011"
+    ],
+    "LeanCpOs.pack": [
+      "LCPO-011"
+    ],
+    "LeanCpOs.fromMask": [
+      "LCPO-011"
+    ],
+    "LeanCpOs.decodeTask": [
+      "LCPO-011"
+    ],
+    "lean_cp_step": [
+      "LCPO-011"
+    ],
+    "initialize_LeanCpOs_Bridge": [
+      "LCPO-011"
+    ],
+    "PROJECT-M0:Scalar ABI": [
+      "LCPO-011"
+    ],
+    "AUTOSAR-CP-R24-11-OS:SWS_Os_00001": [
+      "LCPO-012"
+    ],
+    "AUTOSAR-CP-R24-11-OS:7.1.2 p36": [
+      "LCPO-012"
+    ],
+    "PROJECT-M0:Deferred scope": [
+      "LCPO-013",
+      "LCPO-014",
+      "LCPO-015",
+      "LCPO-016",
+      "LCPO-017",
+      "LCPO-018"
+    ],
+    "T-EVIDENCE": [
+      "LCPO-019"
+    ],
+    "scripts/enumerate_commits.py": [
+      "LCPO-019"
+    ],
+    "scripts/verify_commits.py": [
+      "LCPO-019"
+    ],
+    "scripts/verify.py": [
+      "LCPO-019"
+    ],
+    "tests/test_evidence.py": [
+      "LCPO-019"
+    ],
+    ".github/workflows/verify.yml": [
+      "LCPO-019"
+    ],
+    "PROJECT-M0:Every-commit evidence": [
+      "LCPO-019"
+    ]
+  }
+}

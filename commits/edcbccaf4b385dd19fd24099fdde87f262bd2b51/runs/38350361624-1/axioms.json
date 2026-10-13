@@ -1,0 +1,181 @@
+{
+  "allowed": [
+    "propext"
+  ],
+  "theorems": [
+    {
+      "theorem": "LeanCpOs.initial_valid",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.schedule_valid",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.select_member",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.select_highest",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.select_none_iff",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.activate_preserves",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.terminate_preserves",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.running_current",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.at_most_one_running",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.active_state_consistent",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.activation_limit",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.invalid_activation",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.activation_error_frame",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.activation_success",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.activation_other_active",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.preemption",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.termination_dispatch",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.termination_suspends",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.termination_other_active",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.termination_error_frame",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.unrelated_task_state",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.get_id_correct",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.get_state_correct",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.get_state_invalid",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.initial_suspended",
+      "axioms": [],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.transition_preserves",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.execution_preserves",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    },
+    {
+      "theorem": "LeanCpOs.reachable_valid",
+      "axioms": [
+        "propext"
+      ],
+      "status": "checked"
+    }
+  ]
+}
