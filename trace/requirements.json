@@ -20,6 +20,18 @@
     {
       "id": "A-TRUST",
       "statement": "Lean kernel and compiler distribution, C compiler/linker/runtime, FFI glue, host OS and hardware are trusted; no compiled-code refinement proof."
+    },
+    {
+      "id": "A-BASIC",
+      "statement": "Finite static nonempty configuration of Basic Tasks, positive activation limits, one core. No internal resources, events or hook contexts. Resource ownership is an external call guard."
+    },
+    {
+      "id": "A-CALLER",
+      "statement": "Sequential atomic service steps. ISR nesting is an explicit environment boundary, not implemented physical interrupts. Interrupt-disabled calls are outside the supported call contract."
+    },
+    {
+      "id": "A-TARGET",
+      "statement": "Target scalar adapter: up to 4 tasks, priorities 0..15, sum of activation limits <=8, modeled ISR nesting <=15. Adapter correspondence and AArch64 stack switching are tested, not formally refined."
     }
   ],
   "requirements": [
@@ -680,37 +692,84 @@
     },
     {
       "id": "LCPO-013",
-      "title": "Equal-priority FIFO, ChainTask and multiple activations",
-      "scope": "deferred",
+      "title": "Configurable basic tasks: FIFO priorities, multiple activation requests, ChainTask and Schedule",
+      "scope": "model-implemented",
       "sources": [
         {
-          "document": "PROJECT-M0",
-          "section": "Deferred scope",
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.3",
           "requirement_ids": [],
-          "id_note": "No original requirement ID assigned; section anchor only."
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.5",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.6",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.1-6",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
         }
       ],
-      "definitions": [],
-      "theorems": [],
+      "definitions": [
+        "LeanCpOs.TaskControl.Config",
+        "LeanCpOs.TaskControl.Frame",
+        "LeanCpOs.TaskControl.State",
+        "LeanCpOs.TaskControl.choose",
+        "LeanCpOs.TaskControl.activate",
+        "LeanCpOs.TaskControl.terminate",
+        "LeanCpOs.TaskControl.chain",
+        "LeanCpOs.TaskControl.schedule",
+        "LeanCpOs.TaskControl.getTaskID",
+        "LeanCpOs.TaskControl.getTaskState"
+      ],
+      "theorems": [
+        "LeanCpOs.TaskControl.activate_error_unchanged",
+        "LeanCpOs.TaskControl.terminate_error_unchanged",
+        "LeanCpOs.TaskControl.chain_error_unchanged",
+        "LeanCpOs.TaskControl.schedule_error_unchanged",
+        "LeanCpOs.TaskControl.getTaskID_unchanged",
+        "LeanCpOs.TaskControl.getTaskState_unchanged",
+        "LeanCpOs.TaskControl.terminate_success_discards",
+        "LeanCpOs.TaskControl.chain_success_discards",
+        "LeanCpOs.TaskControl.mayPreempt_deferred_in_ISR",
+        "LeanCpOs.TaskControl.mayPreempt_keeps_equal_or_lower",
+        "LeanCpOs.TaskControl.preemption_preserves_continuation",
+        "LeanCpOs.TaskControl.higher_priority_is_different_task",
+        "LeanCpOs.TaskControl.nonpreemptive_keeps_current",
+        "LeanCpOs.TaskControl.activate_success_in_ISR_queued",
+        "LeanCpOs.TaskControl.self_chain_restarts_at_limit",
+        "LeanCpOs.TaskControl.terminate_resource_guard",
+        "LeanCpOs.TaskControl.chain_resource_guard",
+        "LeanCpOs.TaskControl.schedule_resource_guard"
+      ],
       "assumptions": [
-        "A-STATIC3",
-        "A-ATOMIC",
-        "A-VALID",
+        "A-BASIC",
+        "A-CALLER",
         "A-TRUST"
       ],
       "generated_symbols": [],
-      "boundaries": [
-        "c/bridge.h",
-        "c/host.c"
+      "boundaries": [],
+      "tests": [
+        "T-TASK-CONTROL"
       ],
-      "tests": [],
       "files": [
-        "LeanCpOs/Model.lean",
-        "LeanCpOs/Proofs.lean",
-        "LeanCpOs/Bridge.lean",
-        "tests/test_differential.py"
+        "LeanCpOs/Task/Model.lean",
+        "LeanCpOs/Task/Proofs.lean",
+        "LeanCpOs/Task/Semantics.lean",
+        "TaskMain.lean",
+        "tests/test_task_control.py"
       ],
-      "implementation": "unimplemented",
+      "implementation": "implemented",
       "proof": "unproved",
       "test": "not_run"
     },
@@ -860,8 +919,8 @@
     },
     {
       "id": "LCPO-018",
-      "title": "Bare-metal HAL, actual preemption and machine context refinement",
-      "scope": "deferred",
+      "title": "AArch64 boot, actual task context switching and generated-C decisions; machine refinement remains unproved",
+      "scope": "partial",
       "sources": [
         {
           "document": "PROJECT-M0",
@@ -873,9 +932,7 @@
       "definitions": [],
       "theorems": [],
       "assumptions": [
-        "A-STATIC3",
-        "A-ATOMIC",
-        "A-VALID",
+        "A-TARGET",
         "A-TRUST"
       ],
       "generated_symbols": [],
@@ -883,14 +940,15 @@
         "c/bridge.h",
         "c/host.c"
       ],
-      "tests": [],
-      "files": [
-        "LeanCpOs/Model.lean",
-        "LeanCpOs/Proofs.lean",
-        "LeanCpOs/Bridge.lean",
-        "tests/test_differential.py"
+      "tests": [
+        "T-QEMU-TASK"
       ],
-      "implementation": "unimplemented",
+      "files": [
+        "scripts/verify_qemu.py",
+        "LeanCpOs/Task/Scalar.lean",
+        "docs/QEMU.md"
+      ],
+      "implementation": "partial",
       "proof": "unproved",
       "test": "not_run"
     },
@@ -927,6 +985,139 @@
       "proof": "unproved",
       "test": "not_run",
       "limitation": "Local fixtures exercised; remote Actions/Pages still not executed."
+    },
+    {
+      "id": "LCPO-020",
+      "title": "Generic configuration: valid task identities and activation limits preserved across arbitrary finite service sequences",
+      "scope": "model-implemented",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.3",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.5",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.1-6",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.TaskControl.Valid",
+        "LeanCpOs.TaskControl.activeCount",
+        "LeanCpOs.TaskControl.step",
+        "LeanCpOs.TaskControl.execute"
+      ],
+      "theorems": [
+        "LeanCpOs.TaskControl.choose_none_iff",
+        "LeanCpOs.TaskControl.choose_perm",
+        "LeanCpOs.TaskControl.choose_highest",
+        "LeanCpOs.TaskControl.choose_fifo_head",
+        "LeanCpOs.TaskControl.initial_valid",
+        "LeanCpOs.TaskControl.perm_countP",
+        "LeanCpOs.TaskControl.valid_of_perm",
+        "LeanCpOs.TaskControl.dispatch_perm",
+        "LeanCpOs.TaskControl.dispatch_valid",
+        "LeanCpOs.TaskControl.mayPreempt_perm",
+        "LeanCpOs.TaskControl.mayPreempt_valid",
+        "LeanCpOs.TaskControl.mayPreempt_activation_count",
+        "LeanCpOs.TaskControl.append_activation_count",
+        "LeanCpOs.TaskControl.append_activation_valid",
+        "LeanCpOs.TaskControl.drop_current_valid",
+        "LeanCpOs.TaskControl.activate_valid",
+        "LeanCpOs.TaskControl.terminate_valid",
+        "LeanCpOs.TaskControl.chain_self_valid",
+        "LeanCpOs.TaskControl.chain_valid",
+        "LeanCpOs.TaskControl.schedule_valid",
+        "LeanCpOs.TaskControl.getTaskID_valid",
+        "LeanCpOs.TaskControl.getTaskState_valid",
+        "LeanCpOs.TaskControl.stepPc_valid",
+        "LeanCpOs.TaskControl.enterISR_valid",
+        "LeanCpOs.TaskControl.exitISR_valid",
+        "LeanCpOs.TaskControl.step_valid",
+        "LeanCpOs.TaskControl.execute_valid",
+        "LeanCpOs.TaskControl.reachable_valid",
+        "LeanCpOs.TaskControl.running_iff",
+        "LeanCpOs.TaskControl.at_most_one_running"
+      ],
+      "assumptions": [
+        "A-BASIC",
+        "A-CALLER",
+        "A-TRUST"
+      ],
+      "generated_symbols": [],
+      "boundaries": [],
+      "tests": [
+        "T-TASK-CONTROL"
+      ],
+      "files": [
+        "LeanCpOs/Task/Model.lean",
+        "LeanCpOs/Task/Proofs.lean",
+        "LeanCpOs/Task/Semantics.lean",
+        "TaskMain.lean",
+        "tests/test_task_control.py"
+      ],
+      "implementation": "implemented",
+      "proof": "unproved",
+      "test": "not_run"
+    },
+    {
+      "id": "LCPO-021",
+      "title": "Bounded generated-C adapter agrees with generic Lean and independent oracle for tested sequences",
+      "scope": "partial",
+      "sources": [
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.3",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "4.5",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        },
+        {
+          "document": "OSEK-OS-2.2.3",
+          "section": "13.2.3.1-6",
+          "requirement_ids": [],
+          "id_note": "OSEK uses section anchors, not AUTOSAR requirement IDs."
+        }
+      ],
+      "definitions": [
+        "LeanCpOs.Task.Scalar.step"
+      ],
+      "theorems": [],
+      "assumptions": [
+        "A-BASIC",
+        "A-CALLER",
+        "A-TARGET",
+        "A-TRUST"
+      ],
+      "generated_symbols": [
+        "lean_osek_step"
+      ],
+      "boundaries": [],
+      "tests": [
+        "T-TASK-SCALAR"
+      ],
+      "files": [
+        "LeanCpOs/Task/Scalar.lean",
+        "c/task_scalar_host.c",
+        "tests/test_task_control.py"
+      ],
+      "implementation": "partial",
+      "proof": "unproved",
+      "test": "not_run"
     }
   ]
 }

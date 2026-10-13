@@ -1,19 +1,30 @@
 #!/usr/bin/env python3
 import json,pathlib,re,sys
+from lean_declarations import declarations
 out=pathlib.Path(sys.argv[1]); errors=[]; gaps=[]
 def read(p):return json.loads(pathlib.Path(p).read_text())
 r=read('trace/requirements.json'); sources={s['id']:s for s in read('trace/sources.json')['sources']}
 tests={t['id']:t for t in read('trace/tests.json')['tests']}
 assumptions={a['id'] for a in r['assumptions']}
-lean='\n'.join(p.read_text() for p in pathlib.Path('LeanCpOs').glob('*.lean'))
 c='\n'.join(p.read_text() for p in pathlib.Path('build').glob('*.c'))
-decls={'LeanCpOs.'+n for n in re.findall(r'^(?:def|structure|inductive|theorem) ([\w.]+)',lean,re.M)}
-all_thms={'LeanCpOs.'+n for n in re.findall(r'^theorem (\w+)',lean,re.M)}
+inventory=declarations()
+decls={row['name'] for row in inventory}
+all_thms={row['name'] for row in inventory if row['kind']=='theorem'}
 seen=set(); used=set(); reverse={}; rows=[]
 audit=read(out/'axioms.json') if (out/'axioms.json').exists() else {'theorems':[]}
 proved={x['theorem'] for x in audit['theorems'] if x['status']=='checked'}
 testpath=out/'test-results/tests.json'
 executed={t['id']:t['status'] for t in read(testpath)['tests']} if testpath.exists() else {}
+taskpath=out/'test-results/task-control.json'
+if taskpath.exists():
+    task=read(taskpath)
+    executed[task['id']]=task['status']
+    if isinstance(task.get('scalar'),dict):
+        executed[task['scalar']['id']]=task['scalar']['status']
+qemupath=out/'qemu/qemu.json'
+if qemupath.exists():
+    qemu=read(qemupath)
+    executed[qemu['id']]=qemu['status']
 if (out/'control-flow.log').exists():
     executed['T-CONTROL']='passed' if 'PASS T-CONTROL:' in (out/'control-flow.log').read_text() else 'failed'
 if (out/'evidence-selftests.log').exists():
@@ -53,7 +64,7 @@ for q in r['requirements']:
     rows.append(row)
 for t in all_thms-used:errors.append('untraced theorem '+t)
 identity=read(out/'report.json') if (out/'report.json').exists() else {}
-result=dict(evidence_identity={k:identity.get(k) for k in ['sha','tree_sha','run_id','attempt','exact_commit']},generation={'model':'generate-model.log','bridge':'generate-bridge.log','compiler_flags':'compile-model.log / compile-bridge.log; -O2 -fstack-usage','conditions_file':'report.json','c_assembly_boundary':'C host boundary only; assembly not implemented'},structural_status='passed' if not errors else 'failed',coverage_status='incomplete' if gaps else 'complete',errors=errors,gaps=sorted(set(gaps)),requirements=rows,reverse={k:sorted(set(v)) for k,v in reverse.items()})
+result=dict(evidence_identity={k:identity.get(k) for k in ['sha','tree_sha','run_id','attempt','exact_commit']},generation={'model':'generate-model.log','bridge':'generate-bridge.log','task_scalar':'generate-task-scalar.log','compiler_flags':'compile-model.log / compile-bridge.log / compile-task-scalar.log; -O2 -fstack-usage','conditions_file':'report.json','c_assembly_boundary':'QEMU AArch64 call-boundary contexts; qemu/qemu.json records commands and scenarios; no formal assembly refinement'},structural_status='passed' if not errors else 'failed',coverage_status='incomplete' if gaps else 'complete',errors=errors,gaps=sorted(set(gaps)),requirements=rows,reverse={k:sorted(set(v)) for k,v in reverse.items()})
 (out/'trace.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(dict(structural_status=result['structural_status'],coverage_status=result['coverage_status'],errors=errors,gaps=result['gaps']),indent=2))
 sys.exit(bool(errors))

@@ -6,6 +6,14 @@
 
 Each stage has `passed`, `failed` or `not_run`, return status and log. Failed dependencies cause explicit `not_run`, and other useful checks continue. Overall gate success and requirement coverage are independent: the latter is currently **incomplete**. A failed trace run remains an error; an unproved ABI remains an open coverage gap even if all tests pass.
 
+Current verification includes the generic Basic Task model and all 76 theorem
+axiom reports, its independent Python comparison, the bounded generated-C
+adapter, and seven actual QEMU AArch64 scenarios. CI installs `qemu-system-arm`;
+missing QEMU is a failed required gate, never a successful skip. The task
+comparison is in `test-results/task-control.json`; the target image, generated
+C, versions, commands and UART observations are in `qemu/`. The original M0
+regression checks still run. See README for reproducible local setup.
+
 The static requirements catalogue records scope, implementation, proof and test separately. Runtime evidence determines proof/test results; links alone never upgrade them. `trace.json` contains the same edges in both directions. The validator rejects missing source/definition/theorem/symbol/test/file references and untraced theorems. `impact.py` conservatively maps changed files/modules to requirements/proofs/tests; it is not a proof of minimal semantic impact. Full gates run regardless.
 
 ## Every commit in a push

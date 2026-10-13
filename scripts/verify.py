@@ -15,7 +15,7 @@ def dirty():return git('status','--porcelain','--untracked-files=all')
 sha=git('rev-parse','HEAD');tree=git('rev-parse','HEAD^{tree}');before=source_manifest();dirty_before=dirty()
 run=os.getenv('GITHUB_RUN_ID','local-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'))
 attempt=os.getenv('GITHUB_RUN_ATTEMPT','1')
-report=dict(schema_version=1,sha=sha,tree_sha=tree,run_id=run,attempt=attempt,repository=os.getenv('GITHUB_REPOSITORY'),started_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exact_commit=not bool(dirty_before),stages=[],limitations=['M0 exactly three tasks; no BCC1/SC1/AUTOSAR conformance','No compiler/FFI/machine refinement proof; no liveness, WCET or IRQ safety proof','Source snapshot checked at beginning/end; not an adversarial concurrent-write monitor'],source_hashes=before)
+report=dict(schema_version=1,sha=sha,tree_sha=tree,run_id=run,attempt=attempt,repository=os.getenv('GITHUB_REPOSITORY'),started_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exact_commit=not bool(dirty_before),stages=[],limitations=['Single-core basic-task subset; no full OSEK/BCC/SC1/AUTOSAR conformance','Generic Lean model and bounded generated-C target adapter are compared by tests; no compiler/adapter/assembly refinement proof','No liveness, WCET, full IRQ or resource-subsystem proof','Source snapshot checked at beginning/end; not an adversarial concurrent-write monitor'],source_hashes=before)
 def flush():
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
 def stage(name,cmd,requires=()):
@@ -47,12 +47,15 @@ pathlib.Path('build').mkdir()
 stage('lean-version',['lean','--version'])
 stage('compiler-version',['gcc','--version'])
 stage('lean-build',['lake','build'],['lean-version'])
-stage('axioms',['lake','env','lean','Audit.lean'],['lean-build'])
+stage('prepare-audit',['python3','scripts/lean_declarations.py','build/AuditAll.lean'],['lean-build'])
+stage('axioms',['lake','env','lean','build/AuditAll.lean'],['prepare-audit'])
 stage('axiom-audit',['python3','scripts/audit.py',str(out)],['axioms'])
 stage('generate-model',['lake','env','lean','-c','build/Model.c','LeanCpOs/Model.lean'],['lean-build'])
 stage('generate-bridge',['lake','env','lean','-c','build/Bridge.c','LeanCpOs/Bridge.lean'],['lean-build'])
+stage('generate-task-scalar',['lake','env','lean','-c','build/TaskScalar.c','LeanCpOs/Task/Scalar.lean'],['lean-build'])
 stage('compile-model',['leanc','-O2','-fstack-usage','-c','build/Model.c','-o','build/Model.o'],['generate-model'])
 stage('compile-bridge',['leanc','-O2','-fstack-usage','-c','build/Bridge.c','-o','build/Bridge.o'],['generate-bridge'])
+stage('compile-task-scalar',['leanc','-O2','-fstack-usage','-c','build/TaskScalar.c','-o','build/TaskScalar.o'],['generate-task-scalar'])
 try:prefix=subprocess.check_output(['lean','--print-prefix'],text=True).strip()
 except Exception:prefix='__unavailable__'
 for name,source in [('host','c/host.c'),('control','c/control_flow.c')]:
@@ -60,7 +63,11 @@ for name,source in [('host','c/host.c'),('control','c/control_flow.c')]:
     stage('link-'+name,['leanc','-O2','build/'+name+'.o','build/Model.o','build/Bridge.o','-o','build/'+('c-host' if name=='host' else 'control-flow')],['compile-'+name,'compile-model','compile-bridge'])
 stage('host-and-c-tests',['python3','tests/test_differential.py',str(out/'test-results')],['link-host'])
 stage('control-flow',['build/control-flow'],['link-control'])
-stage('runtime-audit',['python3','scripts/runtime_audit.py',str(out)],['compile-model','compile-bridge'])
+stage('compile-task-scalar-host',['gcc','-std=c11','-O2','-Wall','-Wextra','-Werror','-c','c/task_scalar_host.c','-o','build/task-scalar-host.o'],['lean-build'])
+stage('link-task-scalar-host',['leanc','-O2','build/task-scalar-host.o','build/TaskScalar.o','-o','build/task-scalar-host'],['compile-task-scalar-host','compile-task-scalar'])
+stage('task-control',['python3','tests/test_task_control.py',str(out/'test-results'),'--scalar-runner','build/task-scalar-host'],['link-task-scalar-host'])
+stage('qemu-task-control',['python3','scripts/verify_qemu.py',str(out/'qemu')],['lean-build'])
+stage('runtime-audit',['python3','scripts/runtime_audit.py',str(out)],['compile-model','compile-bridge','compile-task-scalar'])
 stage('symbols',['nm','--defined-only','build/c-host'],['link-host'])
 stage('evidence-selftests',['python3','tests/test_evidence.py'])
 stage('trace',['python3','scripts/trace_check.py',str(out)])
@@ -73,7 +80,7 @@ for exe in ['lean','lake','leanc','gcc']:
     path=shutil.which(exe)
     if path:toolchain[exe]=dict(sha256=digest(pathlib.Path(path).resolve()))
 # Record packaged compiler/runtime without pretending these are proved correct.
-for rel in ['bin/clang','include/lean/lean.h','lib/lean/libleanshared.so','lib/lean/libleanrt.a','lib/lean/libInit.a']:
+for rel in ['bin/clang','bin/ld.lld','include/lean/lean.h','lib/lean/libleanshared.so','lib/lean/libleanrt.a','lib/lean/libInit.a']:
     path=pathlib.Path(prefix)/rel
     if path.is_file():toolchain[rel]=dict(sha256=digest(path))
 compat=os.getenv('LD_PRELOAD')

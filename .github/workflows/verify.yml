@@ -37,6 +37,8 @@ jobs:
           retention-days: 90
       - name: Install pinned Lean bytes
         run: bash scripts/bootstrap_lean.sh "$RUNNER_TEMP/lean-cp-toolchain"
+      - name: Install QEMU for AArch64 task execution
+        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends qemu-system-arm
       - name: Verify each exact commit in a detached worktree
         run: python3 scripts/verify_commits.py evidence
       - name: Preserve successes, failures and not-run records

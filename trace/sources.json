@@ -9,9 +9,10 @@
       "url": "http://portal.osek-vdx.org/files/pdf/specs/os223.pdf",
       "retrieved_url": "https://www.irisa.fr/alf/downloads/puaut/TPNXT/images/os223.pdf",
       "sha256": "a0bb10b0b1413b3d95a40de117d3bedd3bbb74e2cae23c074c5532a95fa715cf",
-      "verification": "official release document read from academic mirror; original endpoint unavailable",
+      "verification": "Official release document read from academic mirror; identical SHA256 independently retrieved from pinned GitHub mirror on 2026-10-13. Basic task APIs 13.2.3.1-6, queue 4.3/4.5, ISR dispatch 4.6.1 and call table 12.2.2 reviewed.",
       "redistribute": false,
-      "rights": "Cover reserves reproduction to written permission; no PDF or extracted text shipped."
+      "rights": "Cover reserves reproduction to written permission; no PDF or extracted text shipped.",
+      "verified_mirror_url": "https://github.com/syfchao/osek_v2-2-3/blob/e70f1eba79d8864f01e45095a3b97d97d63569ba/doc/os223.pdf"
     },
     {
       "id": "ATK2-0010-1.2.2",
@@ -82,6 +83,6 @@
     ],
     "upgrade_policy": "Pin exact release per commit; inspect document rights, hash bytes, review changed requirements, update trace and rerun proofs/tests before claiming coverage. Do not silently follow latest.",
     "mapping_status": "not_verified",
-    "implementation_coverage": "M0 OSEK-based subset only; no R25-11 compliance claim"
+    "implementation_coverage": "OSEK 2.2.3 basic-task subset is the current implementation baseline; R25-11 is a future compatibility mapping, not a conformance claim"
   }
 }

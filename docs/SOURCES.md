@@ -1,6 +1,6 @@
 # Source and rights record
 
-No specification PDF, extracted full text or ATK2 code is distributed here. Metadata and the project's own requirement statements are in `trace/`. All checks below were made on 2026-10-12.
+No specification PDF, extracted full text or ATK2 code is distributed here. Metadata and the project's own requirement statements are in `trace/`. Original checks below were made on 2026-10-12. On 2026-10-13 the exact pinned OSEK PDF was obtained from [a fixed GitHub mirror revision](https://github.com/syfchao/osek_v2-2-3/blob/e70f1eba79d8864f01e45095a3b97d97d63569ba/doc/os223.pdf); its SHA256 matches the existing academic-mirror hash. Basic-task APIs §13.2.3.1–6, queue ordering §§4.3/4.5, ISR scheduling §4.6.1 and the call-context table §12.2.2 were reviewed for the expanded implementation.
 
 | Source | Fixed version / anchor | Role and verification |
 |---|---|---|
@@ -13,6 +13,8 @@ Source URLs and exact hashes are in [sources.json](../trace/sources.json). The O
 The [ATK2 project page](https://www.toppers.jp/atk2.html) states its external specification is based on **AUTOSAR Release 4.0 Revision 3**. That historical basis is not the selected R25-11 target. ATK2's added clarifications and implementation choices are reference-design decisions, not automatically normative AUTOSAR requirements. This project independently chooses the three-task model, derived task states, scalar ABI and host nonlocal dispatcher.
 
 ## Current specification policy
+
+The user-approved current deliverable is the **OSEK OS 2.2.3 single-core Basic Task subset**, followed by actual task execution under QEMU. The larger AUTOSAR target below is retained for future mapping; it does not replace the pinned OSEK clauses used to implement and explain this stage.
 
 The compatibility target is **AUTOSAR Classic Platform OS R25-11**, following the user's preference for the newest officially released specification. On 2026-10-12 the [official CP page](https://www.autosar.org/standards/classic-platform) lists R25-11 as Current Release, and the [official announcement](https://www.autosar.org/news-events/detail/release-r25-11-is-now-available) records its availability on 2025-12-01. This supersedes the earlier R24-11 proposal.
 

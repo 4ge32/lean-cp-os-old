@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 import json,pathlib,re,sys
+from lean_declarations import declarations
 out=pathlib.Path(sys.argv[1]); text=(out/'axioms.log').read_text()
 src='\n'.join(p.read_text() for p in pathlib.Path('.').glob('**/*.lean') if '.lake' not in p.parts and 'build' not in p.parts)
 # No project axioms, opaque proof bypass, native_decide, or admitted goals.
 for token in [r'\bsorry\b',r'\badmit\b',r'^\s*axiom\b',r'\bnative_decide\b',r'\bimplemented_by\b']:
     if re.search(token,src,re.M): raise SystemExit('Forbidden proof construct: '+token)
-names=re.findall(r'^theorem (\w+)',pathlib.Path('LeanCpOs/Proofs.lean').read_text(),re.M)
+names=[row['name'] for row in declarations() if row['kind']=='theorem']
 rows=[]
-for n in names:
-    full='LeanCpOs.'+n
+for full in names:
     no=f"'{full}' does not depend on any axioms"
     m=re.search(re.escape("'"+full+"' depends on axioms: [")+r'([^\]]*)\]',text)
     if no in text: deps=[]
