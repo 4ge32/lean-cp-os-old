@@ -1,0 +1,417 @@
+{
+  "schema_version": 1,
+  "sha": "edcbccaf4b385dd19fd24099fdde87f262bd2b51",
+  "tree_sha": "d6dd7145ab31844217ca744e0651a419bfecc969",
+  "run_id": "38346034716",
+  "attempt": "1",
+  "repository": "4ge32/lean-cp-os",
+  "started_at": "2026-10-13T04:21:31.683929+00:00",
+  "exact_commit": true,
+  "stages": [
+    {
+      "name": "lean-version",
+      "command": [
+        "lean",
+        "--version"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "lean-version.log",
+      "seconds": 0.027
+    },
+    {
+      "name": "compiler-version",
+      "command": [
+        "gcc",
+        "--version"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "compiler-version.log",
+      "seconds": 0.298
+    },
+    {
+      "name": "lean-build",
+      "command": [
+        "lake",
+        "build"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "lean-build.log",
+      "seconds": 1.03
+    },
+    {
+      "name": "axioms",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "Audit.lean"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "axioms.log",
+      "seconds": 0.137
+    },
+    {
+      "name": "axiom-audit",
+      "command": [
+        "python3",
+        "scripts/audit.py",
+        "/home/runner/work/lean-cp-os/lean-cp-os/evidence/commits/edcbccaf4b385dd19fd24099fdde87f262bd2b51/runs/38346034716-1"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "axiom-audit.log",
+      "seconds": 0.026
+    },
+    {
+      "name": "generate-model",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-c",
+        "build/Model.c",
+        "LeanCpOs/Model.lean"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "generate-model.log",
+      "seconds": 0.344
+    },
+    {
+      "name": "generate-bridge",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-c",
+        "build/Bridge.c",
+        "LeanCpOs/Bridge.lean"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "generate-bridge.log",
+      "seconds": 0.181
+    },
+    {
+      "name": "compile-model",
+      "command": [
+        "leanc",
+        "-O2",
+        "-fstack-usage",
+        "-c",
+        "build/Model.c",
+        "-o",
+        "build/Model.o"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "compile-model.log",
+      "seconds": 0.442
+    },
+    {
+      "name": "compile-bridge",
+      "command": [
+        "leanc",
+        "-O2",
+        "-fstack-usage",
+        "-c",
+        "build/Bridge.c",
+        "-o",
+        "build/Bridge.o"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "compile-bridge.log",
+      "seconds": 0.154
+    },
+    {
+      "name": "compile-host",
+      "command": [
+        "gcc",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fstack-usage",
+        "-I/home/runner/work/_temp/lean-cp-toolchain/lean-4.19.0-linux/include",
+        "-Ic",
+        "-c",
+        "c/host.c",
+        "-o",
+        "build/host.o"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "compile-host.log",
+      "seconds": 1.212
+    },
+    {
+      "name": "link-host",
+      "command": [
+        "leanc",
+        "-O2",
+        "build/host.o",
+        "build/Model.o",
+        "build/Bridge.o",
+        "-o",
+        "build/c-host"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "link-host.log",
+      "seconds": 0.118
+    },
+    {
+      "name": "compile-control",
+      "command": [
+        "gcc",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fstack-usage",
+        "-I/home/runner/work/_temp/lean-cp-toolchain/lean-4.19.0-linux/include",
+        "-Ic",
+        "-c",
+        "c/control_flow.c",
+        "-o",
+        "build/control.o"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "compile-control.log",
+      "seconds": 0.143
+    },
+    {
+      "name": "link-control",
+      "command": [
+        "leanc",
+        "-O2",
+        "build/control.o",
+        "build/Model.o",
+        "build/Bridge.o",
+        "-o",
+        "build/control-flow"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "link-control.log",
+      "seconds": 0.125
+    },
+    {
+      "name": "host-and-c-tests",
+      "command": [
+        "python3",
+        "tests/test_differential.py",
+        "/home/runner/work/lean-cp-os/lean-cp-os/evidence/commits/edcbccaf4b385dd19fd24099fdde87f262bd2b51/runs/38346034716-1/test-results"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "host-and-c-tests.log",
+      "seconds": 0.242
+    },
+    {
+      "name": "control-flow",
+      "command": [
+        "build/control-flow"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "control-flow.log",
+      "seconds": 0.002
+    },
+    {
+      "name": "runtime-audit",
+      "command": [
+        "python3",
+        "scripts/runtime_audit.py",
+        "/home/runner/work/lean-cp-os/lean-cp-os/evidence/commits/edcbccaf4b385dd19fd24099fdde87f262bd2b51/runs/38346034716-1"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "runtime-audit.log",
+      "seconds": 0.029
+    },
+    {
+      "name": "symbols",
+      "command": [
+        "nm",
+        "--defined-only",
+        "build/c-host"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "log": "symbols.log",
+      "seconds": 7.103
+    },
+    {
+      "name": "trace",
+      "command": [
+        "python3",
+        "scripts/trace_check.py",
+        "/home/runner/work/lean-cp-os/lean-cp-os/evidence/commits/edcbccaf4b385dd19fd24099fdde87f262bd2b51/runs/38346034716-1"
+      ],
+      "status": "failed",
+      "returncode": 1,
+      "log": "trace.log",
+      "seconds": 0.034
+    },
+    {
+      "name": "source-stability",
+      "status": "passed"
+    }
+  ],
+  "limitations": [
+    "M0 exactly three tasks; no BCC1/SC1/AUTOSAR conformance",
+    "No compiler/FFI/machine refinement proof; no liveness, WCET or IRQ safety proof",
+    "Source snapshot checked at beginning/end; not an adversarial concurrent-write monitor"
+  ],
+  "source_hashes": {
+    ".github/workflows/verify.yml": "d1601d8397e4037a2f42739190ec73f9a5018024a247fb71cc81f95a6cffa9fc",
+    ".gitignore": "05dc4453d6346145b657778c5035e42042aaca270b3137c470af4c10ecb872b9",
+    "Audit.lean": "0a9aa072ac80cb319bd6e0ed4380b262409c6370104a268230712491cea8a3c5",
+    "LICENSE-STATUS.md": "b89c0151b87c09f7c58d98be9b27f9cb8f6a6dcb537360f60d6c7b810a815cab",
+    "LeanCpOs.lean": "9b1c555a3e228139d25cf7f315f5be6c22e7db761b3a2375ab93e47e70303c5f",
+    "LeanCpOs/Bridge.lean": "381044e1147f1212879ac62e5cd266d359fb669660d095d1f6e66bc610dc8dee",
+    "LeanCpOs/Model.lean": "1a596a1990a5a400fbc0ab8df5fa546138841e339034abddde05355940776580",
+    "LeanCpOs/Proofs.lean": "70a960c54cf7d276593ed01fa96ac46c77c785be7368acd429d706d4693b4290",
+    "Main.lean": "a982553e8291f2273c9aebfe455ad850e44fc21a782711945a3b3fec856cc6cb",
+    "README.md": "b853afa0fb6cd22681070420d809b22e5603053299383abb4236d8054723a01b",
+    "c/bridge.h": "850b2340fee819339eb413c20dcdb9ecb6c7f17940b2b3a1f22346d1cc9075c2",
+    "c/control_flow.c": "6dfb4fa7f8dc02de57f8e877b146e4576ff4db5fb6cff4ab954722d938bc9501",
+    "c/host.c": "01401879d7cd5617b6c4a7c42946e32b6c796836f610bb23abed65dde0270811",
+    "docs/CI.md": "44e5fd8e16cb05558ac422326f683e6c76fd0444d613babed7fc576ab8a62255",
+    "docs/DESIGN.md": "a770ebc7e949510146e33411b5e076a1d132b9929274ae1099ada1d1fbc194d1",
+    "docs/RUNTIME.md": "f56022be7841f5f7141b1b9ef36335b03d09f3251ecf8974b2140cb0fa5178c7",
+    "docs/SOURCES.md": "fc3bda7eebbd5794557a255d0d3ae14150e203ba602698965781ef4ab3655b55",
+    "lake-manifest.json": "2229b14fa7864ca346e1e7118ff07bf83cd34807d40b2749fe72fa985cba44de",
+    "lakefile.toml": "661512279f3dfb49f0e63f055b28662f0bf11c6fad158c053749d25b068fa0c9",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "scripts/audit.py": "4bc54b8ab0a10a73235d64f46c8e68723b14d22c1af74e9c18b9bc3993e12ab6",
+    "scripts/bootstrap_lean.sh": "23306f23cea93db593150f6603290f747b4ba965424776d9806f92777e74f547",
+    "scripts/enumerate_commits.py": "aa3b3a44d1b2ebc906354fbcbdf5bd7327a1d49118fb7f8543e5ff2e01a7704b",
+    "scripts/impact.py": "f91f0de703cc02b0ba66cc8d83767a0e9d9890d183bc07b772633bc9cade1df7",
+    "scripts/publish_history.py": "841378ec1e8d9eedc9412a1f37d32386cd5c7f528852caf77f5657232a4f5beb",
+    "scripts/render_report.py": "a198c1289783013d406483bd7eac9a37f096d58b53a8cc2dc53fdf41fbe111f8",
+    "scripts/runtime_audit.py": "bf02245e905cb495b281ae762e9a91ee31e8d699c8b856b2d607e634a7b74d1e",
+    "scripts/trace_check.py": "2e70cf0f80131bcecbc97e83966a598fd260e2230533ab4a94ff2bd4925ed8fa",
+    "scripts/verify.py": "e6a798f4eaf2010b7e6a8e2f63cd90ddabfed27178d5d0044927c1337f923e55",
+    "scripts/verify_commits.py": "a3fc68de9d556dc0c39eb7fe44fee2c576b5ded2ae9b25677c436b0e270fbc48",
+    "tests/test_differential.py": "3a6618fe97db9c994e1846089d7ca4784d7aff0f5ae053105551371ec7957daf",
+    "tools/proc_self_compat.c": "5fb57101e8f3ed674a9add4a87a163d99d5f7e3e55ae9472561f72e385170b20",
+    "trace/requirements.json": "4da4bacea91355968fb5211bd97e4d73db9fbf42c73369a0cd14cab390a918f5",
+    "trace/sources.json": "f113559ca72b1f25a04d574adc872b2505d7b3fd4db523d8a475ceaf515ecbd2",
+    "trace/tests.json": "4c43541cc049416ef8836800d9450dd31520d22e0627c9cfdd476b3395376bb8"
+  },
+  "toolchain": {
+    "lean": {
+      "sha256": "92c3d35b5bfaa5e0fea413a775d504cf46cd95e1345df61c2274f76779e7e023"
+    },
+    "lake": {
+      "sha256": "5111aee5c9434ab05d4265606475ef22e8bda69aaf3a0657b61a7eec6e550bed"
+    },
+    "leanc": {
+      "sha256": "39a4d993906671c6b2eec9e75053aff3917fd1d4530706f32a273aa8f283ab41"
+    },
+    "gcc": {
+      "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+    },
+    "bin/clang": {
+      "sha256": "48c8e81f91e48749438c6ef92543f5a46b8bc71c88a6aaacc047ac4edeee65e2"
+    },
+    "include/lean/lean.h": {
+      "sha256": "d1a21fca5f81d34ce6b763f7af58fcb1a5081e26fda64f475684b642db4ead8c"
+    },
+    "lib/lean/libleanshared.so": {
+      "sha256": "2ab605c74c78f9ba4431a7b5305a4b28a9071d8a826f223eb14fe5530f78e14d"
+    },
+    "lib/lean/libleanrt.a": {
+      "sha256": "1459d81b9bee0ac0cc0693238165fa605d22ed63e43755d49c97122fe3ade8ce"
+    },
+    "lib/lean/libInit.a": {
+      "sha256": "d50f0f30e78509dfd672ad08da0491a695e0ec3fa9fed4b13bdbd223728f3f02"
+    }
+  },
+  "platform": {
+    "system": "Linux",
+    "machine": "x86_64"
+  },
+  "source_unchanged": true,
+  "overall": "failed",
+  "coverage": "incomplete",
+  "finished_at": "2026-10-13T04:21:44.340642+00:00",
+  "artifact_files": {
+    "axiom-audit.log": "4c6eb3c4fbb59159e53e35e16a2b63ff3ba4fd021226e2e5c66dbaab8dec4cef",
+    "axioms.json": "b063134f76ae49b466d304436a2f02e43caf9c7acad6233ec4ee9c6aca9317e9",
+    "axioms.log": "018a4da43baf758d64b63e3fd6292dff4c950cce708cb6924fa7e24e399441d8",
+    "compile-bridge.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compile-control.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compile-host.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compile-model.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiler-version.log": "8497f84b2b8334c413d9c6166bd39d009ba55d2ff60a8f23e66dfa5819c2b048",
+    "control-flow.log": "2494f943d18753691e609dbc240d8fab13bf705f7358fdf5514486b32e3dadfd",
+    "execution.json": "23e9158af1e38f7aaaa0eeca90928814643e7c8e669939fb870fc45806c4ed61",
+    "generate-bridge.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "generate-model.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "generated/Bridge.c": "a2a98e3a2414c42b0eb6dca176e271426f6ce88ae6a59dee01217d7614868821",
+    "generated/Bridge.o": "915c6b0fa378f01c721dbf50a91c332b540c1f750945ecb3b77738439217ee28",
+    "generated/Bridge.su": "86a034b39da7091d8fe4f2d75a9b655f33def1c7778269a2c6645a25351a2c7f",
+    "generated/Model.c": "075aeb3655853e78d67ebd9576874809243761d5f1d89abecf14462162bf6fc6",
+    "generated/Model.o": "e7f5a1af9838e534064b666e935bb9919c93863d51673039f7291f96af7fe986",
+    "generated/Model.su": "f4c2462a1e988d439267867048f00a5c9c8617cf31dd008b4bb6d04f545dcd97",
+    "generated/c-host": "34cd01b7c906b8128a90ad3b7430ac054173e4de028383ae6cfae48cef788785",
+    "generated/control-flow": "2425fa250e4b1f44ec4070bffc8ff6db4627dd4caa2d0692ac6288c4d82e36af",
+    "generated/control.o": "1b23183b3e4dc3300ce89d78260aa31f680a6dbf40297013f5ed5eb1f07fb8d9",
+    "generated/control.su": "a26ccc1040c469ccab44f3443bff62bb6236aa4c6e983b70867a19403a3014ae",
+    "generated/host.o": "9f7f84dcdc2e4887f12a4eb4fe5b75a876607df746ed60f9aaf36eb58972cb73",
+    "generated/host.su": "53c5d240b324b47f781eac2c21d75aeb5beb6a24ef7f0fe995b40d924e6b0563",
+    "host-and-c-tests.log": "93c5051d16258e4c4b191e941fba8d4333d181434f6af26ae5fce716bfd33d50",
+    "lean-build.log": "3a60b6ca4da69ff948f0e10192855fe67c6b285f1fb8c27411ef8b8903e451ad",
+    "lean-version.log": "5362a246ce2545424db10a77de8fd4694f4cf8b0170dfd43fa727acf7f7f259b",
+    "link-control.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "link-host.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "olean/LeanCpOs/Bridge.ilean": "4622cab57b2a73d969a0024fa2d97119db9339f7798826b830b84b881fb3a760",
+    "olean/LeanCpOs/Bridge.ilean.hash": "ab7d7ca424d5f9f32a627c1e982781031496085b647eab84a30259805324bee0",
+    "olean/LeanCpOs/Bridge.olean": "d857b8cca55ff52245473637b7e4fb31fd1c84edd76c93ae0f63419094fa10a3",
+    "olean/LeanCpOs/Bridge.olean.hash": "be500cc2d5e3e4d6d51fe1197abba7711c9a860eeee9fe91a5d55701c0bedd46",
+    "olean/LeanCpOs/Bridge.trace": "5c56c0e22ac04f4ee6e63067300ccfb15da5dc7dd9bd893155aad56e460df6f5",
+    "olean/LeanCpOs/Model.ilean": "a79d00d5a2091314519bb5fd030b1c1e09ee9fdbb2b4a852b7e112c266864c4d",
+    "olean/LeanCpOs/Model.ilean.hash": "1d068db5c08cb0769f117106ef6630379dac0d2b1235f60ffe3164d180cfda99",
+    "olean/LeanCpOs/Model.olean": "114918faa9f3426d3e43017b2911770056baeb4669659fcd79d6507f8ebdc492",
+    "olean/LeanCpOs/Model.olean.hash": "ed16f566721f0b39d070fa8e519eb47399cdfef4b54b9dadd62194a014e9b03d",
+    "olean/LeanCpOs/Model.trace": "a8a0e1fd31b5b8869d4662fab5380b7df3afd899b81e04b5e06cbf627d4167d7",
+    "olean/LeanCpOs/Proofs.ilean": "ab7fbdd7b70461301fc258cf20063f3bce1f73e04fb5a8778326f4a81ec607d2",
+    "olean/LeanCpOs/Proofs.ilean.hash": "1885f3231cddfd9c9baff125c61b38ba38407027fb8829ccb621da5ffa4a6230",
+    "olean/LeanCpOs/Proofs.olean": "8eec2b82eb6189fa6da338c75a8bb919fd366fb5221d13ea780c2b1aa7385c42",
+    "olean/LeanCpOs/Proofs.olean.hash": "2ee3f93e1d367dd55985b8b89cf35dff0373f7871e3798161b2070600d2a3b55",
+    "olean/LeanCpOs/Proofs.trace": "92be1ed44f2aa0c90e24b132bfb2fa3c78fbf9341845a75bd803e9c018149d75",
+    "olean/LeanCpOs.ilean": "dcf6605ba36b8ea750f1e3aa3ade7005d1ae5f192d0c2947fe85a2afcee39388",
+    "olean/LeanCpOs.ilean.hash": "f6ca82b10a96e379ca6093a37cd6f491b271765d476007ed21548de975f3a982",
+    "olean/LeanCpOs.olean": "42ca6e7af90dbceab76a7f99b9439a901ebfa5f6a439b063cc776849e6404acd",
+    "olean/LeanCpOs.olean.hash": "74d6f83605d6e3b9cd5a856d7f5d95ba94776b1c190275eea8df1cd182bd2608",
+    "olean/LeanCpOs.trace": "a5bab6a6cd92904d5f30e226534b57af1ae50837f22589e4c10f0392f48c3184",
+    "runtime-audit.log": "b1a33179ad31f79680ab5a91f021fd01d4f8eecda1a779bed68b03cef40ef7ab",
+    "runtime-notices/LICENSE": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+    "runtime-notices/LICENSES": "7a26b58fa2b7867bf6b19ef7555b8ccfa4fd8ec737f0d64da3bd1d06e14f5e18",
+    "runtime.json": "5ffd73512f70f86e4a9c7bc78b72501c3bb87501c3d0d8ce6e38e3fa490376e3",
+    "symbols.log": "e0267647c95af3bfaa7649d474d72aaeb6ca46e5d9144761e2ba1ff6005696f2",
+    "test-results/T-C-ABI.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test-results/T-C-ABI.stdout": "4dc60cc04adba9bc2880c15160161f19c503b723950dd0064e5323841a4dfcb2",
+    "test-results/T-HOST.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test-results/T-HOST.stdout": "4dc60cc04adba9bc2880c15160161f19c503b723950dd0064e5323841a4dfcb2",
+    "test-results/oracle.txt": "4dc60cc04adba9bc2880c15160161f19c503b723950dd0064e5323841a4dfcb2",
+    "test-results/tests.json": "93c5051d16258e4c4b191e941fba8d4333d181434f6af26ae5fce716bfd33d50",
+    "test-results/vectors.txt": "527d9b1eb202f173524ba010aadbbbb490d6971a02a44ff8c9a8899e8a4f59db",
+    "trace-inputs/requirements.json": "4da4bacea91355968fb5211bd97e4d73db9fbf42c73369a0cd14cab390a918f5",
+    "trace-inputs/sources.json": "f113559ca72b1f25a04d574adc872b2505d7b3fd4db523d8a475ceaf515ecbd2",
+    "trace-inputs/tests.json": "4c43541cc049416ef8836800d9450dd31520d22e0627c9cfdd476b3395376bb8",
+    "trace.json": "5788406de023359773cfbf539a386c244fd51eecae5155a5c3d52e037304b0c5",
+    "trace.log": "ed9a36b92983c40b1d75009e12107350c0cce6b57d9f42bae69c8c073d641eed"
+  }
+}
